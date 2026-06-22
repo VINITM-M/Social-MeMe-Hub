@@ -1,0 +1,210 @@
+.main {
+  background-color: #ffffff;
+  height: 100vh;
+  display: flex;
+}
+
+.sidebar-box {
+  height: 100vh;
+  width: 180px;
+
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: rgb(51, 124, 189);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 10px;
+  box-sizing: border-box;
+}
+
+.sidebar-top,
+.sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.content-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.navbar {
+  height: 60px;
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: rgb(25, 69, 107);
+  box-sizing: border-box;
+  padding: 0 20px;
+}
+
+.support,
+.bell-icon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  cursor: pointer;
+  padding: 6px 8px;
+  font-size: 14px;
+}
+
+.user-name {
+  height: 35px;
+  width: 35px;
+
+  position: absolute;
+  right: 70px;
+
+  border-radius: 50%;
+  background-color: #1976d2;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.logoname {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color: white;
+  font-weight: bold;
+  padding: 10px 8px;
+}
+
+.menu-item {
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: white;
+  cursor: pointer;
+  padding: 3px 3px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.menu-item.active {
+  background-color: rgba(255, 255, 255, 0.2);
+  font-weight: bold;
+  border-left: 3px solid white;
+  padding-left: 0px;
+  /* Adjusting for border */
+}
+
+.create-room {
+  height: 40px;
+  width: 100%;
+  border-radius: 4px;
+  background-color: rgb(21, 221, 154);
+  color: #dcdddf;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.create-room:hover {
+  background-color: rgb(26, 46, 20);
+}
+
+.page-content {
+  flex: 1;
+  padding: 0;
+  background-color: #f5f7fa;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.support:hover,
+.bell-icon:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.search-bar {
+  position: relative;
+  width: 400px;
+
+  height: 35px;
+  left: 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px 10px 8px 35px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: gray;
+}
+
+.chat-icon {
+  position: relative;
+  left: 80px;
+
+  font-size: 30px;
+  top: 4px;
+
+  color: white;
+  cursor: pointer;
+}
+
+.find-game {
+  position: relative;
+  left: 100px;
+
+  height: 35px;
+  width: 100px;
+
+  border-radius: 4px;
+  background-color: rgb(21, 221, 154);
+
+  color: #dcdddf;
+  font-weight: 600;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+
+}
+
+.find-game:hover {
+  background-color: rgb(32, 224, 41);
+}
+
+.logout {
+  position: absolute;
+  right: 20px;
+
+  top: 50%;
+  transform: translateY(-50%);
+
+  font-size: 35px;
+  color: #dcdddf;
+  cursor: pointer;
+}

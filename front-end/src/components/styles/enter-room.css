@@ -1,0 +1,230 @@
+.enter-room {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    gap: 24px;
+    padding: 40px 0;
+}
+
+.room-card {
+    width: 450px;
+    padding: 30px;
+    background: #1e293b;
+    border-radius: 16px;
+    color: white;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+}
+
+.room-title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.room-sub-header {
+    color: #9ca3af;
+    font-size: 14px;
+    margin-bottom: 30px;
+    margin-top: 8px;
+}
+
+.code-name {
+    margin-bottom: 25px;
+}
+
+.room-name-text {
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    color: #9ca3af;
+}
+
+.room-name-input {
+    width: 100%;
+    background: #0f172a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 12px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.room-name-input::placeholder {
+    color: #4b5563;
+}
+
+.region-row {
+    margin-top: 25px;
+    color: #9ca3af;
+}
+
+.region-text {
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.region-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.region-dropdown-toggle {
+    background: #0f172a;
+    color: white;
+    padding: 12px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.region-dropdown-toggle:hover {
+    border-color: #3182ce;
+    background: #1a202c;
+}
+
+.region-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    background: #1e293b;
+    width: 100%;
+    max-height: 180px;
+    overflow-y: auto;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.region-dropdown-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.region-dropdown-menu::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.region-dropdown-menu::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.region-dropdown.open .region-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.region-dropdown-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 12px 18px;
+    color: #e2e8f0;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.region-dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.region-dropdown-item:hover {
+    background-color: #3182ce;
+    color: white;
+    padding-left: 22px;
+}
+
+.join-room {
+    width: 200px;
+    height: 50px;
+    background-color: #0f172a;
+    border-radius: 12px;
+    margin-top: 35px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.join-room:hover {
+    background-color: #3182ce;
+}
+
+.join-room-text {
+    color: rgb(233, 231, 231);
+    font-size: 16px;
+    font-weight: 800;
+    margin: 0;
+}
+
+.join-card {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    color: #ffffff;
+    width: 320px;
+    padding: 20px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    font-family: 'Segoe UI', sans-serif;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.join-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+.join-card h1 h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #38bdf8;
+}
+
+.join-card p {
+    margin: 8px 0;
+    font-size: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.region {
+    color: #facc15;
+}
+
+.capacity {
+    color: #4ade80;
+    font-weight: bold;
+}
+
+.rounds {
+    color: #fb7185;
+}

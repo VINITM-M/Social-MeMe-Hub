@@ -1,0 +1,314 @@
+.container-box1 {
+    width: 450px;
+    padding: 30px;
+
+    background: #1e293b;
+    border-radius: 16px;
+
+    color: white;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+
+    margin-top: 0px;
+}
+
+.region {
+    margin-top: 25px;
+    color: #9ca3af;
+}
+
+.region-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 12px;
+    background-color: #0f172a;
+
+    border-radius: 12px;
+    margin-top: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.main-create {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    gap: 24px;
+    padding: 40px 0;
+}
+
+.header {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.sub-header {
+    color: #9ca3af;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.room-name {
+    margin-bottom: 25px;
+}
+
+.room-name-text {
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    color: #9ca3af;
+}
+
+.room-name-input {
+    width: 100%;
+    background: #0f172a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 12px;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+.settings-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 25px;
+    gap: 15px;
+}
+
+.room-capacity,
+.rounds-capacity,
+.region {
+    flex: 1;
+    color: #9ca3af;
+}
+
+.capacity-text {
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.outer-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px;
+    background-color: #0f172a;
+    border-radius: 12px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.small-box {
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #1e293b;
+    border-radius: 8px;
+
+    color: #60a5fa;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.center-box {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    color: white;
+    font-size: 16px;
+}
+
+.user-icon {
+    font-size: 14px;
+}
+
+.value {
+    font-weight: bold;
+}
+
+/* Common dropdown styles */
+.dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.dropdown-toggle {
+    background: #0f172a;
+    color: white;
+    padding: 12px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.dropdown-toggle:hover {
+    border-color: #3182ce;
+    background: #1a202c;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    background: #1e293b;
+    width: 100%;
+    max-height: 180px;
+    /* Limit height to align with 4-5 items */
+    overflow-y: auto;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Custom scrollbar for dropdown menu */
+.dropdown-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.dropdown-menu::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.dropdown.open .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 12px 18px;
+    color: #e2e8f0;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.dropdown-item:hover {
+    background-color: #3182ce;
+    color: white;
+    padding-left: 22px;
+}
+
+.create-game {
+    width: 200px;
+    height: 50px;
+
+    background-color: #0f172a;
+    border-radius: 12px;
+
+    margin-top: 25px;
+    margin-left: 25%;
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.create-game:hover {
+    background-color: #3182ce;
+}
+
+.create-game-text {
+    color: rgb(233, 231, 231);
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.container-box2 {
+    width: 420px;
+    margin: 40px auto;
+
+    padding: 25px;
+    border-radius: 16px;
+
+    background: #0f172a;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+
+    color: white;
+}
+
+.room-details h1 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #22c55e;
+}
+
+.room-details-inner {
+    background: #1e293b;
+    padding: 15px;
+    border-radius: 12px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.room-details-inner span {
+    color: #60a5fa;
+    font-weight: 600;
+}
+
+.room-details-inner p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.room-details-inner a {
+    color: #38bdf8;
+    text-decoration: none;
+    margin-left: 5px;
+    word-break: break-all;
+}
+
+.room-details-inner a:hover {
+    text-decoration: underline;
+}

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import './styles/enter-room.css';
+import '../styles/enter-room.css';
 import { useState, useRef, useEffect } from 'react';
 
 const EnterRoom = () => {

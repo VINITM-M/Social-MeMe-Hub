@@ -52,7 +52,7 @@ def save_room(room_id, room_code, room_name, capacity, rounds, region):
         cursor.execute(
             """
                 INSERT INTO rooms (room_id, room_code, room_name, capacity, rounds, region) 
-                VALUES (%s, %s, %s, %s, %s, %s ) 
+                VALUES (%s, %s, %s, %s, %s,  %s ) 
             """, 
             (
                 room_id,

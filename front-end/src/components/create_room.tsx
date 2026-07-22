@@ -1,4 +1,4 @@
-import './styles/create_room.css';
+import '../styles/create_room.css';
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 
@@ -44,13 +44,18 @@ const CreateRoom = () => {
             user_id: 1234
         };
 
+        console.log("Payload to be sent:", payload);
+
         try {
             const response = await axios.post('http://127.0.0.1:8000/create-room', payload);
             console.log("Response Data:", response.data);
+
             const responseData = response.data.room ?? response.data;
+
             setRoomId(responseData.room_id);
             setRoomCode(responseData.room_code);
             setRoomCreated(true);
+            
         } catch (error) {
             console.warn("Backend not available:", error);
         }

@@ -1,10 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from DataBase.room_connection import save_room, add_host_to_room, add_user_details, join_room 
 import uuid
 import string
 import random
+
+from DataBase.schema import init_db
+from DataBase.services import register_user_service, create_room_service, join_room_service
 
 app = FastAPI()
 
@@ -15,6 +17,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.on_event("startup")
+def startup_event():
+    init_db()
 
 class RoomConfig(BaseModel):
     roomName: str
@@ -41,58 +47,48 @@ def generate_room_code():
 
 @app.post('/user')
 def user(user: User):
-
     user_name = user.user_name
     email = user.email
     user_id = 1234   
 
-    user_data, is_new = add_user_details(user_name, email, user_id)
+    user_data, is_new = register_user_service(user_name, email, user_id)
 
     return {
        "status": "success", 
-       "data" : user_data,
+       "data": user_data,
        "is_new": is_new 
     }
 
 @app.post('/create-room')
 def create_room(config: RoomConfig):
-
     room_id = generate_room_id()
     room_code = generate_room_code()
 
     print("Generated Room ID: ", room_id)
 
-    save_room(
+    room_data = create_room_service(
         room_id,
         room_code,
         config.roomName,
         config.capacity,
         config.rounds,
-        config.selectedRegion
+        config.selectedRegion,
+        config.user_id
     )
-
-    add_host_to_room(room_id, config.user_id)
-    is_new = True
 
     return {
         "message": "Room created successfully",
         "room_id": room_id,
         "room_code": room_code, 
-        "is_new" : True 
+        "room": room_data,
+        "is_new": True 
     }
 
 @app.post('/join-room')
-
 def join_room_endpoint(request: JoinRoomRequest):
-
-    print("Join Code Response: ", end='')
-    print(request.room_code, request.region)
-
-    result = join_room(
+    result = join_room_service(
         request.room_code,
         request.region,
         request.user_id
     )
-
-    print("Result: ", result)
-    return result  
+    return result

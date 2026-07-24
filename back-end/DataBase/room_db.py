@@ -10,7 +10,7 @@ def create_room(room_id, room_code, room_name, host_id, capacity, rounds, region
             INSERT INTO rooms (room_id, room_code, room_name, host_id, capacity, current_players, rounds, region)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
             """,
-            (room_id, room_code, room_name, str(host_id), capacity, 1, rounds, region)  
+            (room_id, room_code, room_name, host_id, capacity, 1, rounds, region)  
         )
         conn.commit()
 

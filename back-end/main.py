@@ -67,13 +67,13 @@ def create_room(config: RoomConfig):
     print("Generated Room ID: ", room_id)
 
     room_data = create_room_service(
-        room_id,
-        room_code,
-        config.roomName,
-        config.capacity,
-        config.rounds,
-        config.selectedRegion,
-        config.user_id
+        room_id=room_id,
+        room_code=room_code,
+        room_name=config.roomName,
+        host_id=config.user_id,
+        capacity=config.capacity,
+        rounds=config.rounds,
+        region=config.selectedRegion
     )
 
     return {

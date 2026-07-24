@@ -9,8 +9,16 @@ def register_user_service(user_name, email, user_id):
     new_user = create_user(user_id, user_name, email)
     return new_user, True
 
-def create_room_service(room_id, room_code, room_name, capacity, rounds, region, host_id):
-    room = create_room(room_id, room_code, room_name, host_id, capacity, rounds, region)
+def create_room_service(room_id, room_code, room_name, host_id, capacity, rounds, region):
+    room = create_room(
+        room_id=room_id,
+        room_code=room_code,
+        room_name=room_name,
+        host_id=host_id,
+        capacity=capacity,
+        rounds=rounds,
+        region=region
+    )
     add_host(room_id, host_id)
     return room
 

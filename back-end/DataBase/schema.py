@@ -57,7 +57,7 @@ def init_db():
             ready BOOLEAN DEFAULT FALSE, 
             status VARCHAR(50) DEFAULT 'active',
             joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-            UNIQUE(room_id, user_id), 
+            UNIQUE(room_id), 
             FOREIGN KEY(room_id) REFERENCES rooms(room_id) ON DELETE CASCADE, 
             FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE
         );

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import '../styles/enter-room.css';
 import { useState, useRef, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 const EnterRoom = () => {
 
@@ -14,16 +15,29 @@ const EnterRoom = () => {
     const [usersIn, setUsersIn] = useState('');
     const [roomJoined, setRoomJoined] = useState(false);
     const [rounds, setRounds] = useState('');
+    const { roomId: routeRoomId, region: routeRegion, roomCode: routeRoomCode } = useParams();
 
     const handleSelectRegion = (region: string) => {
         setSelectedRegion(region);
         setIsOpen(false);
     };
 
-    const handleJoinRoom = async () => {
+    const hasAutoJoinedRef = useRef(false);
+
+    useEffect(() => {
+        if (!routeRoomId || !routeRegion || !routeRoomCode) return;
+        if (hasAutoJoinedRef.current) return;
+
+        hasAutoJoinedRef.current = true;
+        setRoomCode(routeRoomCode);
+        setSelectedRegion(decodeURIComponent(routeRegion));
+        handleJoinRoom(routeRoomCode, decodeURIComponent(routeRegion));
+    }, [routeRoomId, routeRegion, routeRoomCode]);
+
+    const handleJoinRoom = async (codeOverride?: string, regionOverride?: string) => {
         const data = {
-            room_code: roomCode,
-            region: selectedRegion
+            room_code: codeOverride ?? roomCode,
+            region: regionOverride ?? selectedRegion
         };
 
         try {
@@ -31,11 +45,13 @@ const EnterRoom = () => {
             const result = response.data;
 
             if (result?.status === 'success') {
-                setRoomId(result.room_id ?? '');
-                setRoomName(result.room_name ?? '');
-                setCapacity(result.capacity ?? result.remaining_capacity ?? '');
+                const roomData = result.room ?? {};
+
+                setRoomId(roomData.room_id ?? result.room_id ?? '');
+                setRoomName(roomData.room_name ?? roomData.roomName ?? result.roomName ?? '');
+                setCapacity(result.capacity ?? roomData.capacity ?? result.remaining_capacity ?? '');
                 setUsersIn(result.presentIn ?? '');
-                setRounds(result.rounds ?? '');
+                setRounds(result.rounds ?? roomData.rounds ?? '');
                 setRoomJoined(true);
             } else {
                 console.log('Join room failed:', result?.message ?? result);
@@ -58,42 +74,42 @@ const EnterRoom = () => {
     return (
         <div className='enter-room'>
 
-            { !roomJoined && 
-            <div className='room-card'>
-                <h1 className='room-title'>Enter Room</h1>
-                <p className='room-sub-header'>Enter the code and select region to join a game</p>
+            {!roomJoined && 
+                <div className='room-card'>
+                    <h1 className='room-title'>Enter Room</h1>
+                    <p className='room-sub-header'>Enter the code and select region to join a game</p>
 
-                <div className='code-name'>
-                    <p className='room-name-text'>Room Code</p>
-                    <input
-                        type="text"
-                        className='room-name-input'
-                        placeholder='Enter room code'
-                        value={roomCode}
-                        onChange={(e) => setRoomCode(e.target.value)}
-                    />
-                </div>
+                    <div className='code-name'>
+                        <p className='room-name-text'>Room Code</p>
+                        <input
+                            type="text"
+                            className='room-name-input'
+                            placeholder='Enter room code'
+                            value={roomCode}
+                            onChange={(e) => setRoomCode(e.target.value)}
+                        />
+                    </div>
 
-                <div className='region-row'>
-                    <p className='region-text'>REGION</p>
-                    <div className={`region-dropdown ${isOpen ? 'open' : ''}`} ref={dropdownRef}>
-                        <button className="region-dropdown-toggle" onClick={() => setIsOpen(!isOpen)}>
-                            {selectedRegion} <i className={`fas fa-chevron-${isOpen ? 'up' : 'down'}`}></i>
-                        </button>
-                        <div className="region-dropdown-menu">
-                            <button className="region-dropdown-item" onClick={() => handleSelectRegion('North America (US-East)')}>North America (US-East)</button>
-                            <button className="region-dropdown-item" onClick={() => handleSelectRegion('North America (US-West)')}>North America (US-West)</button>
-                            <button className="region-dropdown-item" onClick={() => handleSelectRegion('Europe (EU-West)')}>Europe (EU-West)</button>
-                            <button className="region-dropdown-item" onClick={() => handleSelectRegion('Asia (JP-Tokyo)')}>Asia (JP-Tokyo)</button>
-                            <button className="region-dropdown-item" onClick={() => handleSelectRegion('South America (BR)')}>South America (BR)</button>
+                    <div className='region-row'>
+                        <p className='region-text'>REGION</p>
+                        <div className={`region-dropdown ${isOpen ? 'open' : ''}`} ref={dropdownRef}>
+                            <button className="region-dropdown-toggle" onClick={() => setIsOpen(!isOpen)}>
+                                {selectedRegion} <i className={`fas fa-chevron-${isOpen ? 'up' : 'down'}`}></i>
+                            </button>
+                            <div className="region-dropdown-menu">
+                                <button className="region-dropdown-item" onClick={() => handleSelectRegion('North America (US-East)')}>North America (US-East)</button>
+                                <button className="region-dropdown-item" onClick={() => handleSelectRegion('North America (US-West)')}>North America (US-West)</button>
+                                <button className="region-dropdown-item" onClick={() => handleSelectRegion('Europe (EU-West)')}>Europe (EU-West)</button>
+                                <button className="region-dropdown-item" onClick={() => handleSelectRegion('Asia (JP-Tokyo)')}>Asia (JP-Tokyo)</button>
+                                <button className="region-dropdown-item" onClick={() => handleSelectRegion('South America (BR)')}>South America (BR)</button>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div className='join-room' onClick={handleJoinRoom}>
-                    <p className='join-room-text'>JOIN ROOM</p>
+                    <div className='join-room' onClick={() => handleJoinRoom()}>
+                        <p className='join-room-text'>JOIN ROOM</p>
+                    </div>
                 </div>
-            </div>
             }
 
             { roomJoined && 

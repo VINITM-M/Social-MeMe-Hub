@@ -156,6 +156,7 @@ const MyComponent = () => {
             <Route path="/lobby" element={<Lobby />} />
             <Route path="/create-newroom" element={<CreateRoom />} />
             <Route path="/enter-room" element={<EnterRoom />} />
+            <Route path="/join/:roomId/:region/:roomCode" element={<EnterRoom />} />
             <Route path="/" element={<HomePage user={user} />} />
           </Routes>
         </div>

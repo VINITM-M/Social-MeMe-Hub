@@ -18,16 +18,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.on_event("startup")
-def startup_event():
-    init_db()
-
 class RoomConfig(BaseModel):
     roomName: str
     capacity: int
     rounds: int
     selectedRegion: str
-    user_id: int = 1248
+    user_id: int = random.randint(1000, 9999)  # Random user_id for testing
 
 class User(BaseModel):
     user_name: str
@@ -36,7 +32,7 @@ class User(BaseModel):
 class JoinRoomRequest(BaseModel):
     room_code: str
     region: str
-    user_id: int = 1234
+    user_id: int = random.randint(1000, 9999)  # Random user_id for testing
 
 
 def generate_room_id():
@@ -75,17 +71,22 @@ def create_room(config: RoomConfig):
         rounds=config.rounds,
         region=config.selectedRegion
     )
+    room_link = f"http://localhost:3000/join/{room_id}/{config.selectedRegion}/{room_code}"
 
     return {
         "message": "Room created successfully",
         "room_id": room_id,
         "room_code": room_code, 
         "room": room_data,
-        "is_new": True 
+        "is_new": True,
+        "room_link": room_link
     }
 
 @app.post('/join-room')
 def join_room_endpoint(request: JoinRoomRequest):
+
+    print("Join Room Request:", request)  # Debugging line
+
     result = join_room_service(
         request.room_code,
         request.region,

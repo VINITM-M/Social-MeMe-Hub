@@ -11,6 +11,7 @@ const CreateRoom = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [roomId, setRoomId] = useState('');
     const [roomCode, setRoomCode] = useState('');
+    const [roomLink, setRoomLink] = useState(''); 
     const [roomCreated, setRoomCreated] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -50,10 +51,11 @@ const CreateRoom = () => {
             const response = await axios.post('http://127.0.0.1:8000/create-room', payload);
             console.log("Response Data:", response.data);
 
-            const responseData = response.data.room ?? response.data;
+            const responseData = response.data;
 
-            setRoomId(responseData.room_id);
-            setRoomCode(responseData.room_code);
+            setRoomId(responseData.room_id ?? responseData.room?.room_id ?? '');
+            setRoomCode(responseData.room_code ?? responseData.room?.room_code ?? '');
+            setRoomLink(responseData.room_link ?? responseData.room?.room_link ?? '');
             setRoomCreated(true);
             
         } catch (error) {
@@ -137,7 +139,7 @@ const CreateRoom = () => {
                             <p><span>Capacity:</span> {capacity}</p>
                             <p><span>Rounds:</span> {rounds}</p>
                             <p><span>Region:</span> {selectedRegion}</p>
-                            <p><span>Join Link:</span></p>
+                            <p><span>Join Link:</span> <a href={roomLink} target="_blank" rel="noopener noreferrer">{roomLink}</a></p>
                         </div>
                     </div>
                 </div>

@@ -10,17 +10,15 @@ def register_user_service(user_name, email, user_id):
     return new_user, True
 
 def create_room_service(room_id, room_code, room_name, host_id, capacity, rounds, region):
-    if host_id is not None and not get_user_by_user_id(host_id):
-        create_user(host_id, "Room Host", f"{host_id}@local")
 
     room = create_room(
-        room_id=room_id,
-        room_code=room_code,
-        room_name=room_name,
-        host_id=host_id,
-        capacity=capacity,
-        rounds=rounds,
-        region=region
+        room_id,
+        room_code,
+        room_name,
+        host_id,
+        capacity,
+        rounds,
+        region
     )    
     add_host(room_id, host_id)
     return room
@@ -58,9 +56,6 @@ def join_room_service(room_code, region, user_id):
             "remainingCapacity": 0,
             "room": room
         }
-
-    if user_id is not None and not get_user_by_user_id(user_id):
-        create_user(user_id, "Guest", f"{user_id}@local")
 
     add_player(room_id, user_id)
     increment_room_players(room_id)

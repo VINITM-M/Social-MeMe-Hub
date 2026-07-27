@@ -6,15 +6,14 @@ def add_host(room_id, user_id):
 def add_player(room_id, user_id):
     return add_member(room_id, user_id, role='player')
 
-def add_member(room_id, user_id, role='player'):
+def add_member(room_id, user_id, role):
     conn = db_pool.get_connection()
     cursor = conn.cursor(dictionary=True)
     try:
         cursor.execute(
             """
             INSERT INTO room_members (room_id, user_id, role, status)
-            VALUES (%s, %s, %s, 'active')
-            ON DUPLICATE KEY UPDATE status = 'active'
+            VALUES (%s, %s, %s, 'Active')
             """,
             (room_id, str(user_id), role)
         )

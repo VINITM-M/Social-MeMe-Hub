@@ -1,9 +1,10 @@
 from DataBase.database import db_pool 
 
 def create_room(room_id, room_code, room_name, host_id, capacity, rounds, region): 
+
     conn = db_pool.get_connection() 
     cursor = conn.cursor(dictionary=True) 
-
+    #inserting the data into existing room table 
     try: 
         cursor.execute(
             """
@@ -24,6 +25,7 @@ def create_room(room_id, room_code, room_name, host_id, capacity, rounds, region
         conn.close()
 
 def get_room_by_code_and_region(room_code, region):
+    #get the room by code and region 
     conn = db_pool.get_connection()
     cursor = conn.cursor(dictionary=True)
     try:

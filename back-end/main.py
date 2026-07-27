@@ -25,6 +25,12 @@ class RoomConfig(BaseModel):
     selectedRegion: str
     user_id: int = random.randint(1000, 9999)  # Random user_id for testing
 
+class account_creation(BaseModel):
+    first_name: str 
+    last_name: str 
+    email: str 
+    password:str
+
 class User(BaseModel):
     user_name: str
     email: str
@@ -39,7 +45,18 @@ def generate_room_id():
     return str(uuid.uuid4())
 
 def generate_room_code():
-    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6)) 
+
+@app.post('/signup') 
+def signup(user: account_creation):
+
+    #bypass the values
+    first_name = user.first_name
+    last_name = user.last_name
+    email = user.email
+    password = user.password
+    user_name = first_name + last_name
+    
 
 @app.post('/user')
 def user(user: User):
@@ -57,20 +74,21 @@ def user(user: User):
 
 @app.post('/create-room')
 def create_room(config: RoomConfig):
+
+    #room_id Creation along with room_code 
     room_id = generate_room_id()
     room_code = generate_room_code()
 
-    print("Generated Room ID: ", room_id)
-
     room_data = create_room_service(
-        room_id=room_id,
-        room_code=room_code,
-        room_name=config.roomName,
-        host_id=config.user_id,
-        capacity=config.capacity,
-        rounds=config.rounds,
-        region=config.selectedRegion
+        room_id,
+        room_code,
+        config.roomName,
+        config.user_id,
+        config.capacity,
+        config.rounds,
+        config.selectedRegion
     )
+    #room-link generation 
     room_link = f"http://localhost:3000/join/{room_id}/{config.selectedRegion}/{room_code}"
 
     return {
@@ -84,9 +102,7 @@ def create_room(config: RoomConfig):
 
 @app.post('/join-room')
 def join_room_endpoint(request: JoinRoomRequest):
-
-    print("Join Room Request:", request)  # Debugging line
-
+    
     result = join_room_service(
         request.room_code,
         request.region,

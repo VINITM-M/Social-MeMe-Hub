@@ -28,7 +28,9 @@ class RoomConfig(BaseModel):
 class account_creation(BaseModel):
     first_name: str 
     last_name: str 
-    email: str 
+    dob: str
+    email_id: str 
+    phone_number: str 
     password:str
 
 class User(BaseModel):
@@ -53,10 +55,19 @@ def signup(user: account_creation):
     #bypass the values
     first_name = user.first_name
     last_name = user.last_name
-    email = user.email
+    user_name = first_name + last_name 
+    email = user.email_id
+    phone_number = user.phone_number
     password = user.password
-    user_name = first_name + last_name
-    
+    dob = user.dob
+
+    print(first_name)
+    print(last_name)
+    print(user_name)
+    print(email)
+    print(phone_number)
+    print(password)
+    print(dob)
 
 @app.post('/user')
 def user(user: User):

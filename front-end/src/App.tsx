@@ -17,7 +17,9 @@ import CreateRoom from './components/create_room';
 import EnterRoom from './components/enter-room';
 import axios from 'axios';
 import { useState } from 'react';
-
+import LoginPage from './components/login_page';
+import PersonIcon from '@mui/icons-material/Person';
+import Login from '../src/components/login_page';
 
 const user_name = "Vinith Murugesan";
 const email = "vinithsin@gmail.com";
@@ -30,34 +32,6 @@ export interface User {
 }
 
 const MyComponent = () => {
-
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-
-    const postUser = async () => {
-
-      try {
-        const response = await axios.post("http://localhost:8000/user", {
-          user_name: user_name,
-          email: email
-        });
-
-        const result = response.data;
-
-        console.log("Full response data:", result.data);
-        setUser({
-          ...result.data,
-          is_new: result.is_new
-        });
-
-      } catch (error) {
-        console.error("Error creating user:", error);
-      }
-    };
-    postUser();
-
-  }, []);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -132,32 +106,20 @@ const MyComponent = () => {
             Find Game
           </div>
 
-          <div className="user-name">
-            {user_name
-              ? user_name
-                .trim()
-                .split(' ')
-                .filter((name: string) => name)
-                .map((name: string) => name[0])
-                .slice(0, 2)
-                .join('')
-                .toUpperCase()
-              : ''}
+          <div className='profile-login' onClick={() => navigate("/login")}>
+            <PersonIcon className='profile-icon' />
           </div>
-          <div className='logout'>
-            <LogoutIcon />
-          </div>
-        </div>
 
+        </div>
 
         <div className="page-content">
           <Routes>
-            <Route path="/home" element={<HomePage user={user} />} />
+            <Route path = "/home" element = {<HomePage/>} />
             <Route path="/lobby" element={<Lobby />} />
             <Route path="/create-newroom" element={<CreateRoom />} />
             <Route path="/enter-room" element={<EnterRoom />} />
             <Route path="/join/:roomId/:region/:roomCode" element={<EnterRoom />} />
-            <Route path="/" element={<HomePage user={user} />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         </div>
       </div>

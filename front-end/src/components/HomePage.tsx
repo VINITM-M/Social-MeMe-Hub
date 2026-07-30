@@ -4,23 +4,10 @@ import AddIcon from '@mui/icons-material/Add';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
-import CloseIcon from '@mui/icons-material/Close';
-import { User } from '../App';
 
+const HomePage = () => {
 
-const HomePage = ({ user }: { user: User | null }) => {
-
-
-    const [showPopup, setShowPopup] = useState(false);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        console.log("HomePage mounted, user:", user);
-        if (user) {
-            console.log("Showing popup");
-            setShowPopup(true);
-        }
-    }, [user]);
 
     return (
         <div className="home-page">
@@ -54,30 +41,6 @@ const HomePage = ({ user }: { user: User | null }) => {
                     <p className="text">FIND GAME</p>
                 </div>
             </div>
-
-            {showPopup && (
-                <div className="popup-overlay">
-
-                    <div className="user-details-pop">
-
-                        <button
-                            className="close-btn"
-                            onClick={() => setShowPopup(false)}
-                        >
-                            <CloseIcon />
-                        </button>
-
-                        <h3 style={{ color: user?.is_new ? '#15dd9a' : '#1e8aa5', marginBottom: '20px' }}>
-                            {user?.is_new ? "User Details Created" : "User Details Already Exists"}
-                        </h3>
-
-                        <p><strong>Name:</strong> {user?.user_name}</p>
-                        <p><strong>Email:</strong> {user?.email}</p>
-
-                    </div>
-
-                </div>
-            )}
 
         </div>
     );

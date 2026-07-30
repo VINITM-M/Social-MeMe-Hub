@@ -2,12 +2,14 @@ from DataBase.user_db import get_user_by_email, get_user_by_user_id, create_user
 from DataBase.room_db import create_room, get_room_by_code_and_region, increment_room_players
 from DataBase.members import add_host, add_player, is_member, count_members
 
-def register_user_service(user_name, email, user_id):
+def register_user_service(user_name, email, password):
+
     user = get_user_by_email(email)
     if user:
-        return user, False
-    new_user = create_user(user_id, user_name, email)
-    return new_user, True
+        return user['email'], False
+
+    new_user = create_user(user_name, email, password)
+    return new_user['email'], True
 
 def create_room_service(room_id, room_code, room_name, host_id, capacity, rounds, region):
 

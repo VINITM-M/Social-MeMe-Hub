@@ -6,22 +6,12 @@ def init_db():
 
     try:
 
-        # account-creation Table 
+        # USERS Table 
         cursor.execute("""
-        CREATE TABLE IF NOT EXISTS account_creation (
+        CREATE TABLE IF NOT EXISTS Users (
             userName VARCHAR(255) NOT NULL, 
             email VARCHAR(255) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL, 
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-        """)
-
-        # USERS Table
-        cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            user_id INT NOT NULL UNIQUE,
-            user_name VARCHAR(100) NOT NULL,
-            email VARCHAR(255) NOT NULL UNIQUE,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
         """)
@@ -48,14 +38,14 @@ def init_db():
         CREATE TABLE IF NOT EXISTS room_members (
             id INT AUTO_INCREMENT PRIMARY KEY, 
             room_id CHAR(36) NOT NULL,
-            user_id VARCHAR(100) NOT NULL,
+            email VARCHAR(255) NOT NULL,
             role ENUM('host', 'player') DEFAULT 'player', 
             ready BOOLEAN DEFAULT FALSE, 
             status VARCHAR(50) DEFAULT 'active',
             joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
             UNIQUE(room_id), 
             FOREIGN KEY(room_id) REFERENCES rooms(room_id) ON DELETE CASCADE, 
-            FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE
+            FOREIGN KEY(email) REFERENCES users(email) ON DELETE CASCADE
         );
         """)
 

@@ -7,6 +7,7 @@ import random
 
 from DataBase.schema import init_db
 from DataBase.services import register_user_service, create_room_service, join_room_service
+from DataBase.user_db import get_user_by_email, create_user
 
 app = FastAPI()
 
@@ -18,25 +19,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-class RoomConfig(BaseModel):
+class Login(BaseModel):
+    email_id: str
+    password: str 
+
+class Signup(BaseModel): 
+    first_name: str
+    last_name: str
+    email_id: str
+    password: str 
+class RoomConfig(BaseModel): 
     roomName: str
     capacity: int
     rounds: int
     selectedRegion: str
     user_id: int = random.randint(1000, 9999)  # Random user_id for testing
-
-class account_creation(BaseModel):
-    first_name: str 
-    last_name: str 
-    dob: str
-    email_id: str 
-    phone_number: str 
-    password:str
-
 class User(BaseModel):
     user_name: str
-    email: str
-
+    email: str 
 class JoinRoomRequest(BaseModel):
     room_code: str
     region: str
@@ -47,41 +47,28 @@ def generate_room_id():
     return str(uuid.uuid4())
 
 def generate_room_code():
-    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6)) 
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))  
 
-@app.post('/signup') 
-def signup(user: account_creation):
+@app.post('/login') 
+def login(login_details: Login):
+    print(f"Received login details: {login_details}") 
 
-    #bypass the values
-    first_name = user.first_name
-    last_name = user.last_name
-    user_name = first_name + last_name 
-    email = user.email_id
-    phone_number = user.phone_number
-    password = user.password
-    dob = user.dob
+@app.post('/signup')
+def signup(sign_details: Signup): 
 
-    print(first_name)
-    print(last_name)
-    print(user_name)
-    print(email)
-    print(phone_number)
-    print(password)
-    print(dob)
-
-@app.post('/user')
-def user(user: User):
-    user_name = user.user_name
-    email = user.email
-    user_id = 1234   
-
-    user_data, is_new = register_user_service(user_name, email, user_id)
-
-    return {
-       "status": "success", 
-       "data": user_data,
-       "is_new": is_new 
-    }
+    user_data, boolean = register_user_service(sign_details.first_name + " " + sign_details.last_name, sign_details.email_id, sign_details.password) 
+    if not boolean:
+        return {
+            "message": "User already exists",
+            "user": user_data,
+            "is_registered": False
+        } 
+    else: 
+        return {
+            "message": "User registered successfully", 
+            "user": user_data,
+            "is_registered": True
+        }
 
 @app.post('/create-room')
 def create_room(config: RoomConfig):
@@ -120,3 +107,14 @@ def join_room_endpoint(request: JoinRoomRequest):
         request.user_id
     )
     return result
+
+
+@app.post('/user')
+def create_or_get_user(user: User):
+   
+    existing = get_user_by_email(user.email)
+    if existing:
+        return {"data": existing, "is_new": False}
+
+    new_user = create_user(user.user_name, user.email, "")
+    return {"data": new_user, "is_new": True}

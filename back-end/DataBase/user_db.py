@@ -29,16 +29,16 @@ def get_user_by_user_id(user_id):
         conn.close()
 
 
-def create_user(user_id, user_name, email): 
+def create_user(user_name, email, password): 
     conn = db_pool.get_connection() 
     cursor = conn.cursor(dictionary=True) 
     try: 
         cursor.execute(
             """
-            INSERT INTO users (user_id, user_name, email)
-            VALUES (%s, %s, %s)
+            INSERT INTO users (userName, email, password, created_at)
+            VALUES (%s, %s, %s, CURRENT_TIMESTAMP)
             """,
-            (str(user_id), user_name, email)
+            (user_name, email, password)
         )  
         conn.commit() 
         cursor.execute(

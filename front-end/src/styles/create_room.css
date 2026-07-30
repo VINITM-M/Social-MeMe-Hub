@@ -1,13 +1,10 @@
 .container-box1 {
     width: 450px;
     padding: 30px;
-
     background: #1e293b;
     border-radius: 16px;
-
     color: white;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-
     margin-top: 0px;
 }
 
@@ -20,10 +17,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
     padding: 12px;
     background-color: #0f172a;
-
     border-radius: 12px;
     margin-top: 8px;
     border: 1px solid rgba(255, 255, 255, 0.05);

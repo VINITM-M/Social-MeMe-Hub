@@ -5,9 +5,18 @@ import uuid
 import string
 import random
 
+from fastapi import FastAPI, HTTPException, Depends
+from pydantic import BaseModel
+import pyotp
+import string
+import random
+
 from DataBase.schema import init_db
 from DataBase.services import register_user_service, create_room_service, join_room_service, login_details_validation
 from DataBase.user_db import get_user_by_email, create_user
+
+import random
+import time
 
 
 app = FastAPI()
@@ -41,8 +50,10 @@ class User(BaseModel):
 class JoinRoomRequest(BaseModel):
     room_code: str
     region: str
-    user_id: int = random.randint(1000, 9999)  # Random user_id for testing
+    user_id: int = random.randint(1000, 9999)  # Random user_id for testing 
 
+class OtpVerify(BaseModel):
+    email_id: str
 
 def generate_room_id():
     return str(uuid.uuid4())
@@ -120,4 +131,15 @@ def join_room_endpoint(request: JoinRoomRequest):
         request.region,
         request.user_id
     )
-    return result
+    return result 
+
+@app.post('/otp') 
+
+def otp_verify(request: OtpVerify):
+    print(f"Received OTP verification request: {request}")
+
+    generation_otp(request.email_id)
+    return {
+        "message": "OTP verification request received",
+        "user": request.email_id
+    } 

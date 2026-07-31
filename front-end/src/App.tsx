@@ -32,6 +32,7 @@ export interface User {
 }
 
 const MyComponent = () => {
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -40,6 +41,7 @@ const MyComponent = () => {
 
   return (
     <div className="main">
+      {showLoginModal && <LoginPage onClose={() => setShowLoginModal(false)} />}
       <div className='sidebar-box'>
         <div className="sidebar-top">
           <div className='logoname'>
@@ -106,7 +108,7 @@ const MyComponent = () => {
             Find Game
           </div>
 
-          <div className='profile-login' onClick={() => navigate("/login")}>
+          <div className='profile-login' onClick={() => setShowLoginModal(true)}>
             <PersonIcon className='profile-icon' />
           </div>
 
@@ -119,7 +121,7 @@ const MyComponent = () => {
             <Route path="/create-newroom" element={<CreateRoom />} />
             <Route path="/enter-room" element={<EnterRoom />} />
             <Route path="/join/:roomId/:region/:roomCode" element={<EnterRoom />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<LoginPage onClose={() => navigate(-1)} />} />
           </Routes>
         </div>
       </div>

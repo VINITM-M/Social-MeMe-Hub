@@ -12,10 +12,11 @@ def hash_password(plain_password):
     return hashed
 
 def verify_password(plain_password, hashed):
-    return bcrypt.checkpw(
-        plain_password.encode('utf-8'),
-        hashed
-    )
+    if isinstance(plain_password, str):
+        plain_password = plain_password.encode('utf-8')
+    if isinstance(hashed, str):
+        hashed = hashed.encode('utf-8')
+    return bcrypt.checkpw(plain_password, hashed)
 
 def get_user_by_email(email):
     conn = db_pool.get_connection() 

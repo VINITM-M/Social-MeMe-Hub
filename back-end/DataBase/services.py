@@ -1,4 +1,4 @@
-from DataBase.user_db import get_user_by_email, get_user_by_user_id, create_user
+from DataBase.user_db import get_user_by_email, get_user_by_user_id, create_user, verify_password
 from DataBase.room_db import create_room, get_room_by_code_and_region, increment_room_players
 from DataBase.members import add_host, add_player, is_member, count_members
 
@@ -7,12 +7,12 @@ def login_details_validation(email, login_password):
 
     user = get_user_by_email(email) 
     if user:
-        if login_password == user['password']:
+        if verify_password(login_password, user['password']):
             return True, user['email'] 
         else:
             return 'Incorrect Password', user['email'] 
-    elif not user:
-            return "User not found"
+    else:
+        return "User not found", None
 
 def register_user_service(first_name , last_name, email, login_password):
 
@@ -21,7 +21,9 @@ def register_user_service(first_name , last_name, email, login_password):
         return user['email'], False
 
     new_user = create_user(first_name , last_name, email, login_password)
-    return new_user['email'], True
+    if new_user and isinstance(new_user, dict) and 'email' in new_user:
+        return new_user['email'], True
+    return email, False
 
 def create_room_service(room_id, room_code, room_name, host_id, capacity, rounds, region):
 

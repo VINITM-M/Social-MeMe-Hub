@@ -2,9 +2,14 @@ import React, { useState } from "react";
 import "../styles/login_page.css";
 import axios from "axios";
 import CloseIcon from '@mui/icons-material/Close';
+import { useNavigate } from "react-router-dom";
 
+interface LoginPageProps {
+    onClose?: () => void;
+}
 
-const LoginPage = () => {
+const LoginPage: React.FC<LoginPageProps> = ({ onClose }) => {
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState("login");
 
     const [first_name, setfirst_name] = useState("");
@@ -27,26 +32,50 @@ const LoginPage = () => {
             console.log("Login Response:", response.data);
 
             if (response.data == 1) {
-                return alert("User already exists. Please login.");
-            } 
-            else if(response.data == 2){
-                return alert("Invalid password"); 
+                console.log("User already exists. Please login.");
+                otpverify();
+                navigate("/otp_verify");
+
+            }
+            else if (response.data == 2) {
+                return alert("Invalid password");
             }
             else {
-                return alert("User not found ") ; 
+                return alert("User not found ");
             }
 
             setUserDetails(response.data);
             setShowPopup(true);
-            
+
         } catch (error) {
             console.warn("Backend not available:", error);
+        }
+    };
+
+    const handleClose = () => {
+        if (onClose) {
+            onClose();
+        } else {
+            navigate(-1);
         }
     };
 
     const popClose = async () => {
         setShowPopup(false);
         setUserDetails(null);
+    }
+
+    const otpverify = async () => {
+
+        const payload = {
+            email_id: email_id
+        }
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/otp', payload)
+            console.log("OTP Response:", response.data)
+        } catch (error) {
+            console.warn("Backend not available:", error);
+        }
     }
 
     const handleSignup = async () => {
@@ -62,10 +91,13 @@ const LoginPage = () => {
             const response = await axios.post('http://127.0.0.1:8000/signup', payload);
             console.log("Signup Response:", response.data);
 
-            if(response.data.is_registered === false){
+            if (response.data.is_registered === false) {
                 alert("User already exists. Please login.");
-            }else {
+            } else {
                 alert("User registered successfully. Please login.");
+                otpverify();
+                navigate('/otp_verify');
+
             }
 
         } catch (error) {
@@ -75,8 +107,11 @@ const LoginPage = () => {
     }
 
     return (
-        <div className="main-login-box">
+        <div className="main-login-box" onClick={(e) => { if (e.target === e.currentTarget) handleClose(); }}>
             <div className="login-card">
+                <div className="closeIcon" onClick={handleClose} title="Close">
+                    <CloseIcon />
+                </div>
                 {/* Popup modal for showing user details */}
                 {showPopup && userDetails && (
                     <div className="modal-backdrop">
@@ -86,7 +121,7 @@ const LoginPage = () => {
                             <div className="user-detail-row"><strong>Name:</strong> {userDetails.first_name || userDetails.name || "-"} {userDetails.last_name || ""}</div>
                             <div className="user-detail-row"><strong>Email:</strong> {userDetails.email_id || userDetails.email || "-"}</div>
                             {userDetails.room && <div className="user-detail-row"><strong>Room:</strong> {userDetails.room}</div>}
-                            <div style={{marginTop:16}}>
+                            <div style={{ marginTop: 16 }}>
                                 <button className="login-button" onClick={popClose}>Close</button>
                             </div>
                         </div>

@@ -8,19 +8,39 @@ body {
     font-family: Arial, sans-serif;
 }
 
+.main-login-box {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
 .login-card {
     width: 420px;
-    margin-left: 330px;
     background: white;
     border-radius: 20px;
     padding: 30px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    position: relative;
 }
 
-.closeIcon{
+.closeIcon {
     display: flex;
-    overflow: hidden;
-    margin-left:340px;
+    justify-content: flex-end;
+    cursor: pointer;
+    margin-bottom: 10px;
+    color: #555;
+    transition: color 0.2s ease;
+}
+
+.closeIcon:hover {
+    color: #000;
 }
 .switch-container {
     display: flex;

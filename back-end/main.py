@@ -6,8 +6,9 @@ import string
 import random
 
 from DataBase.schema import init_db
-from DataBase.services import register_user_service, create_room_service, join_room_service
+from DataBase.services import register_user_service, create_room_service, join_room_service, login_details_validation
 from DataBase.user_db import get_user_by_email, create_user
+
 
 app = FastAPI()
 
@@ -51,12 +52,25 @@ def generate_room_code():
 
 @app.post('/login') 
 def login(login_details: Login):
+
+    boolean, log = login_details_validation(login_details.email_id, login_details.password) 
+
+    if boolean == True:
+        return 1 
+    elif boolean == "Incorrect Password":
+        return 2 
+    
+    else:
+        return 3
+ 
     print(f"Received login details: {login_details}") 
 
 @app.post('/signup')
 def signup(sign_details: Signup): 
 
-    user_data, boolean = register_user_service(sign_details.first_name + " " + sign_details.last_name, sign_details.email_id, sign_details.password) 
+    password = sign_details.password
+
+    user_data, boolean = register_user_service(sign_details.first_name ,  sign_details.last_name, sign_details.email_id, password) 
     if not boolean:
         return {
             "message": "User already exists",
@@ -107,14 +121,3 @@ def join_room_endpoint(request: JoinRoomRequest):
         request.user_id
     )
     return result
-
-
-@app.post('/user')
-def create_or_get_user(user: User):
-   
-    existing = get_user_by_email(user.email)
-    if existing:
-        return {"data": existing, "is_new": False}
-
-    new_user = create_user(user.user_name, user.email, "")
-    return {"data": new_user, "is_new": True}

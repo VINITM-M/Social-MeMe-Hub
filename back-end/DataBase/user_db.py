@@ -1,11 +1,28 @@
 from DataBase.database import db_pool
+import bcrypt
+
+#password Implemention with bcrypt function 
+def hash_password(plain_password):
+    # Convert the password to bytes
+    pw_bytes = plain_password.encode('utf-8')
+    # Generate salt with cost factor 12
+    salt = bcrypt.gensalt(rounds=12)
+    # Hash the password
+    hashed = bcrypt.hashpw(pw_bytes, salt)
+    return hashed
+
+def verify_password(plain_password, hashed):
+    return bcrypt.checkpw(
+        plain_password.encode('utf-8'),
+        hashed
+    )
 
 def get_user_by_email(email):
     conn = db_pool.get_connection() 
     cursor = conn.cursor(dictionary=True) 
     try:
         cursor.execute(
-            "SELECT * FROM users WHERE email=%s",
+            "SELECT * FROM USERS WHERE email=%s",
             (email,)
         ) 
         user = cursor.fetchone() 
@@ -28,27 +45,50 @@ def get_user_by_user_id(user_id):
         cursor.close()
         conn.close()
 
+def create_user(first_name, last_name, email, password):
 
-def create_user(user_name, email, password): 
-    conn = db_pool.get_connection() 
-    cursor = conn.cursor(dictionary=True) 
-    try: 
+    hashed_pw = hash_password(password)
+    conn = db_pool.get_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    try:
         cursor.execute(
             """
-            INSERT INTO users (userName, email, password, created_at)
+            INSERT INTO users_address (
+                first_name,
+                last_name,
+                email,
+                created_at
+            )
             VALUES (%s, %s, %s, CURRENT_TIMESTAMP)
             """,
-            (user_name, email, password)
-        )  
-        conn.commit() 
+            (first_name, last_name, email)
+        )
+
         cursor.execute(
-            "SELECT * FROM users WHERE email=%s",
+            """
+            INSERT INTO users (
+                email,
+                password
+            )
+            VALUES (%s, %s)
+            """,
+            (email, hashed_pw)
+        )
+
+        conn.commit()
+
+        cursor.execute(
+            "SELECT * FROM users WHERE email = %s",
             (email,)
         )
+
         return cursor.fetchone()
-    except Exception as e: 
+
+    except Exception as e:
         print("Error creating user:", e)
         return get_user_by_email(email)
-    finally: 
-        cursor.close() 
-        conn.close() 
+
+    finally:
+        cursor.close()
+        conn.close()

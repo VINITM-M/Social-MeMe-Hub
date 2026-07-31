@@ -25,7 +25,17 @@ const LoginPage = () => {
         try {
             const response = await axios.post('http://127.0.0.1:8000/login', payload);
             console.log("Login Response:", response.data);
-            // show user details in a popup instead of navigating
+
+            if (response.data == 1) {
+                return alert("User already exists. Please login.");
+            } 
+            else if(response.data == 2){
+                return alert("Invalid password"); 
+            }
+            else {
+                return alert("User not found ") ; 
+            }
+
             setUserDetails(response.data);
             setShowPopup(true);
             

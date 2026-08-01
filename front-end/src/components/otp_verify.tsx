@@ -1,41 +1,104 @@
-import { useState, useEffect } from "react";
+import axios from "axios";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const OtpVerify = () => {
-    const navigate = useNavigate();
-    const [otp, setOtp] = useState('');
 
-    return (
+  const navigate = useNavigate();
 
-        <div className="otp-card">
-            <div className="main-otp">
-                <div className="close">
-                    <CloseIcon />
+  const [otp, setOtp] = useState("");
+  const [resendCount, setResendCount] = useState(0);
 
-                </div>
-                <div class="otp-group">
+ // Function to resend the OTP to the user's email 
+  const resendOtp = async () => {
 
-                    <div className='otp-description'> We shared the OTP on this Email Address : [EMAIL_ADDRESS]
-                        <input type="text" maxlength="1" inputmode="numeric">
-                            <input type="text" maxlength="1" inputmode="numeric">
-                                <input type="text" maxlength="1" inputmode="numeric">
-                                    <input type="text" maxlength="1" inputmode="numeric">
-                                    </div>
-                                    <div className="Otp-verification"> OTP Verification Page
-                                    </div>
+    if (resendCount >= 3) {
+      alert(
+        "You have exceeded the maximum number of OTP resend attempts."
+      ); 
+      return;
+    }
+    try {
 
-                                    <div className='digit-pin'>
+      const payload = {
+        email_id: localStorage.getItem("email_id")
+      };
 
-                                    </div>
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}/otp`,
+        payload
+      );
 
-                                    <div className='resend-btn'> Resend OTP </div>
-                                    <div className="verify OTP"> Verify </div>
+      setResendCount(prev => prev + 1);
+      alert("OTP Sent Successfully");
+    }
+    catch (error) {
+      alert("Unable to send OTP");
+    }
+  };
+  // Function to verify the OTP entered by the user 
+  const verifyOtp = async () => {
 
-                                </div>
-                            </div>
+    try {
+      const payload = {
+        email_id: localStorage.getItem("email_id"),
+        otp: otp
+      };
+      const response =await axios.post(`${process.env.REACT_APP_API_URL}/verify-otp`,payload);
+      alert(response.data.message);
+    }
+    catch (error) {
 
-                            )
-    
-}
+      const message = error.response?.data?.detail;
+      if (message ==="Maximum OTP attempts exceeded") {
+        alert("Maximum OTP attempts exceeded. Request a new OTP.");
+      }
+      else if (message === "OTP Expired") {
+        alert("OTP Expired");
+      }
+      else if (message === "No OTP request found for this email") {
 
-                            export default OtpVerify;
+        alert("No OTP request found.");
+
+      }
+      else if (message ==="Invalid OTP") {
+        alert("Invalid OTP");
+      }
+      else {
+        alert("Server Error");
+      }
+    }
+  };
+
+  return (
+
+    <div className="otp-verify-container">
+
+      <div className="otp-verify-box">
+
+        <h2>OTP Verification</h2>
+
+        <input
+          type="text"
+          value={otp}
+          onChange={(e) =>
+            setOtp(e.target.value)
+          }
+          placeholder="Enter OTP"
+        />
+
+        <button onClick={verifyOtp}>
+          Verify OTP
+        </button>
+
+        <button onClick={resendOtp}>
+          Resend OTP
+        </button>
+
+      </div>
+
+    </div>
+  );
+};
+
+export default OtpVerify;

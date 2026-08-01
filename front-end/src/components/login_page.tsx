@@ -14,44 +14,91 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose }) => {
 
     const [first_name, setfirst_name] = useState("");
     const [last_name, setlast_name] = useState("");
-    const [email_id, setemail_id] = useState("");
+    const [email_id, setemail_id] = useState("");vh
     const [password, setpassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [showPopup, setShowPopup] = useState(false);
     const [userDetails, setUserDetails] = useState<any>(null);
+    const [errorMessage, setErrorMessage] = useState(""); 
+    
+    const API_URL = process.env.REACT_APP_API_URL
 
+    //otp verify logic 
+    const otp = async () => {
+
+        const payload = {
+            email_id: email_id
+        }
+        try {
+            const response = await axios.post(`${API_URL}/otp`, payload)
+            console.log("OTP Response:", response.data)
+
+        } catch (error) {
+            console.warn("Backend not available:", error);
+        }
+    }
+    // Login details validation function 
     const handleLogin = async () => {
 
         const payload = {
             email_id: email_id,
             password: password
         };
-        console.log("Login Payload:", payload);
         try {
-            const response = await axios.post('http://127.0.0.1:8000/login', payload);
-            console.log("Login Response:", response.data);
+            const response = await axios.post(`${API_URL}/login`, payload);
 
-            if (response.data == 1) {
-                console.log("User already exists. Please login.");
-                otpverify();
+            if (response.data?.status == 200) {
+
+                await otpverify();
+
                 navigate("/otp_verify");
 
+                return;
             }
-            else if (response.data == 2) {
-                return alert("Invalid password");
-            }
-            else {
-                return alert("User not found ");
-            }
-
-            setUserDetails(response.data);
-            setShowPopup(true);
 
         } catch (error) {
-            console.warn("Backend not available:", error);
+
+            if (error.response?.status === 401) {
+                setErrorMessage("Invalid Password");
+            }
+            else if (error.response?.status === 404) {
+                setErrorMessage("User not found");
+            }
+            else {
+                setErrorMessage("Server error. Please try again later.");
+            }
         }
     };
+    // Signup details validation function 
+    const handleSignup = async () => {
 
+        const payload = {
+            first_name: first_name,
+            last_name: last_name,
+            email_id: email_id,
+            password: password
+        };
+
+        try {
+            const response = await axios.post(`${API_URL}/signup`, payload); 
+
+            if (response.data?.message === "User registered successfully") {
+
+                await otp();
+                navigate("/otp_verify");
+
+                return;
+            }
+        } catch (error) {
+            if(error.response?.status == 400){
+                alert("User already exists, please Login"); 
+            }
+            else{
+                console.warn("Backend not available:", error);
+            }
+        }
+
+    }
     const handleClose = () => {
         if (onClose) {
             onClose();
@@ -64,48 +111,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose }) => {
         setShowPopup(false);
         setUserDetails(null);
     }
-
-    const otpverify = async () => {
-
-        const payload = {
-            email_id: email_id
-        }
-        try {
-            const response = await axios.post('http://127.0.0.1:8000/otp', payload)
-            console.log("OTP Response:", response.data)
-        } catch (error) {
-            console.warn("Backend not available:", error);
-        }
-    }
-
-    const handleSignup = async () => {
-
-        const payload = {
-            first_name: first_name,
-            last_name: last_name,
-            email_id: email_id,
-            password: password
-        };
-        console.log("Signup Payload:", payload);
-        try {
-            const response = await axios.post('http://127.0.0.1:8000/signup', payload);
-            console.log("Signup Response:", response.data);
-
-            if (response.data.is_registered === false) {
-                alert("User already exists. Please login.");
-            } else {
-                alert("User registered successfully. Please login.");
-                otpverify();
-                navigate('/otp_verify');
-
-            }
-
-        } catch (error) {
-            console.warn("Backend not available:", error);
-        }
-
-    }
-
     return (
         <div className="main-login-box" onClick={(e) => { if (e.target === e.currentTarget) handleClose(); }}>
             <div className="login-card">

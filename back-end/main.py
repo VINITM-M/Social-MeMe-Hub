@@ -17,7 +17,12 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:8000",
+        "http://127.0.0.1:8000"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -62,8 +67,11 @@ def generate_room_id():
 def generate_room_code():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))  
 
-@app.post('/login') 
+@app.post("/login")
 def login(login_details: Login):
+
+    print(f"Received login request: {login_details}")
+    print(f"Email: {login_details.email_id}, Password: {login_details.password}")
 
     result = login_details_validation(
         login_details.email_id,
@@ -71,8 +79,8 @@ def login(login_details: Login):
     return result 
 
 @app.post('/signup')
-def signup(sign_details: Signup): 
-
+def signup(sign_details: Signup):
+    print(f"Received signup request: {sign_details.first_name, sign_details.last_name, sign_details.email_id, sign_details.password}" )
     result = register_user_service( sign_details.first_name ,  
                                     sign_details.last_name,
                                     sign_details.email_id, 
@@ -80,8 +88,6 @@ def signup(sign_details: Signup):
     return result 
 @app.post('/otp') 
 def otp_verify(request: OtpVerify):
-    print(f"Received OTP verification request: {request}")
-
     return send_otp(request.email_id)
 
 @app.post("/verify-otp") 

@@ -1,4 +1,3 @@
-import React from 'react';
 import '../styles/lobby.css';
 import AddIcon from '@mui/icons-material/Add';
 import RoomRow from './RoomRow';

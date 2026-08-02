@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import '../styles/HomePage.css';
 import AddIcon from '@mui/icons-material/Add';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';

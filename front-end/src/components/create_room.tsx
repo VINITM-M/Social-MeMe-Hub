@@ -4,6 +4,7 @@ import axios from 'axios';
 
 const CreateRoom = () => {
 
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
     const [roomName, setRoomName] = useState('');
     const [capacity, setCapacity] = useState(8);
     const [rounds, setRounds] = useState(3);
@@ -48,7 +49,7 @@ const CreateRoom = () => {
         console.log("Payload to be sent:", payload);
 
         try {
-            const response = await axios.post('http://127.0.0.1:8000/create-room', payload);
+            const response = await axios.post(`${API_URL}/create-room`, payload);
             console.log("Response Data:", response.data);
 
             const responseData = response.data;

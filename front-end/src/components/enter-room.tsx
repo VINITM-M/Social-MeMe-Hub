@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 
 const EnterRoom = () => {
 
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
     const [roomCode, setRoomCode] = useState('');
     const [selectedRegion, setSelectedRegion] = useState('Select Region');
     const [isOpen, setIsOpen] = useState(false);
@@ -41,7 +42,7 @@ const EnterRoom = () => {
         };
 
         try {
-            const response = await axios.post('http://localhost:8000/join-room', data);
+            const response = await axios.post(`${API_URL}/join-room`, data);
             const result = response.data;
 
             if (result?.status === 'success') {

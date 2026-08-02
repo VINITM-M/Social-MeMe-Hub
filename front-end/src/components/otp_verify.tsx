@@ -1,21 +1,28 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import '../styles/otp_verify.css'
+import CloseIcon from "@mui/icons-material/Close";
 
 const OtpVerify = () => {
 
   const navigate = useNavigate();
+  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
   const [otp, setOtp] = useState("");
   const [resendCount, setResendCount] = useState(0);
 
- // Function to resend the OTP to the user's email 
+  const handleClose = () => {
+    navigate("/home");
+  };
+
+  // Function to resend the OTP to the user's email 
   const resendOtp = async () => {
 
     if (resendCount >= 3) {
       alert(
         "You have exceeded the maximum number of OTP resend attempts."
-      ); 
+      );
       return;
     }
     try {
@@ -24,13 +31,18 @@ const OtpVerify = () => {
         email_id: localStorage.getItem("email_id")
       };
 
-      await axios.post(
-        `${process.env.REACT_APP_API_URL}/otp`,
+      const response = await axios.post(
+        `${API_URL}/otp`,
         payload
       );
 
       setResendCount(prev => prev + 1);
-      alert("OTP Sent Successfully");
+      if (response.data?.otp) {
+        localStorage.setItem("dev_otp", response.data.otp);
+        alert(`OTP Sent Successfully. Test OTP: ${response.data.otp}`);
+      } else {
+        alert("OTP Sent Successfully");
+      }
     }
     catch (error) {
       alert("Unable to send OTP");
@@ -44,13 +56,16 @@ const OtpVerify = () => {
         email_id: localStorage.getItem("email_id"),
         otp: otp
       };
-      const response =await axios.post(`${process.env.REACT_APP_API_URL}/verify-otp`,payload);
+      const response = await axios.post(`${API_URL}/verify-otp`, payload);
       alert(response.data.message);
+      navigate('/home')
     }
     catch (error) {
 
-      const message = error.response?.data?.detail;
-      if (message ==="Maximum OTP attempts exceeded") {
+      const axiosError = error as { response?: { data?: { detail?: string } } };
+
+      const message = axiosError.response?.data?.detail;
+      if (message === "Maximum OTP attempts exceeded") {
         alert("Maximum OTP attempts exceeded. Request a new OTP.");
       }
       else if (message === "OTP Expired") {
@@ -61,7 +76,7 @@ const OtpVerify = () => {
         alert("No OTP request found.");
 
       }
-      else if (message ==="Invalid OTP") {
+      else if (message === "Invalid OTP") {
         alert("Invalid OTP");
       }
       else {
@@ -75,7 +90,9 @@ const OtpVerify = () => {
     <div className="otp-verify-container">
 
       <div className="otp-verify-box">
-
+        <div className="closeIcon" onClick={handleClose}>
+          <CloseIcon />
+        </div>
         <h2>OTP Verification</h2>
 
         <input

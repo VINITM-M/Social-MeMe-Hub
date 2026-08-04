@@ -12,7 +12,11 @@ def init_db():
             email VARCHAR(255) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL
         );
+<<<<<<< HEAD
         """) 
+=======
+        """)
+>>>>>>> fd6ff0a37a3386bff42393694047fd1e4a63bb16
 
         # USERS Address Table 
         cursor.execute("""
@@ -57,6 +61,7 @@ def init_db():
         );
         """)
 
+<<<<<<< HEAD
         #OTP Expiration Table 
         cursor.execute("""
         CREATE TABLE email_otps (
@@ -70,6 +75,8 @@ def init_db():
         """)
         
 
+=======
+>>>>>>> fd6ff0a37a3386bff42393694047fd1e4a63bb16
         conn.commit()
         print("Database schema initialized successfully.")
     except Exception as e:

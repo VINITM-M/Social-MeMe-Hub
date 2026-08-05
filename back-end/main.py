@@ -1,7 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from fastapi import FastAPI, HTTPException, Depends
 from DataBase.schema import init_db
 from DataBase.services import register_user_service, create_room_service, join_room_service, login_details_validation
 from DataBase.user_db import get_user_by_email, create_user
@@ -9,7 +8,6 @@ from DataBase.otp import send_otp, verify_otp
 import uuid
 import string
 import random
-import string
 import time
 
 
@@ -21,7 +19,8 @@ app.add_middleware(
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "http://localhost:8000",
-        "http://127.0.0.1:8000"
+        "http://127.0.0.1:8000",
+        "http://localhost:3001"
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -70,13 +69,18 @@ def generate_room_code():
 @app.post("/login")
 def login(login_details: Login):
 
-    print(f"Received login request: {login_details}")
-    print(f"Email: {login_details.email_id}, Password: {login_details.password}")
-
     result = login_details_validation(
         login_details.email_id,
-        login_details.password) 
-    return result 
+        login_details.password)
+
+    # result is a tuple: (True/message, email)
+    status, email = result
+    if status is True:
+        raise 
+    elif status == "Incorrect Password":
+        raise HTTPException(status_code=401, detail="Invalid password")
+    else:
+        raise HTTPException(status_code=404, detail="User not found")
 
 @app.post('/signup')
 def signup(sign_details: Signup):

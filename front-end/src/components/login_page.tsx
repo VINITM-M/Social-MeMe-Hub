@@ -43,7 +43,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose }) => {
                 "http://localhost:8000/otp",
                 payload
             );
-            
+
             if (response.data?.otp) {
                 localStorage.setItem(
                     "dev_otp",
@@ -112,7 +112,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose }) => {
                 payload
             );
 
-            if(response.status == 201) {
+            if (response.status == 201) {
                 alert("User already exists");
                 return;
             }
@@ -126,9 +126,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose }) => {
                 navigate("/otp_verify");
             }, 2000);
 
-        }catch (error: any) {
-                setIsSubmitting(false);
-                console.warn("Backend not available:", error);
+        } catch (error: any) {
+            setIsSubmitting(false);
+            console.warn("Backend not available:", error);
         }
     };
 

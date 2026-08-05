@@ -1,13 +1,8 @@
 from DataBase.database import db_pool 
-<<<<<<< HEAD
-def add_host(room_id, user_id):
-    return add_member(room_id, user_id, role='host')
-=======
 
 def add_host(room_id, user_id):
     return add_member(room_id, user_id, role='host')
 
->>>>>>> fd6ff0a37a3386bff42393694047fd1e4a63bb16
 def add_player(room_id, user_id):
     return add_member(room_id, user_id, role='player')
 

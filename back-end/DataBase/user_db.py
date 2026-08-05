@@ -20,7 +20,7 @@ def verify_password(plain_password, hashed):
 
 def get_user_by_email(email):
     conn = db_pool.get_connection() 
-    cursor = conn.cursor(dictionary=True) 
+    cursor = conn.cursor(dictionary=True)
     try:
         cursor.execute(
             "SELECT * FROM USERS WHERE email=%s",
@@ -55,11 +55,6 @@ def create_user(first_name, last_name, email, password):
     try:
         cursor.execute(
             """
-<<<<<<< HEAD
-            INSERT INTO users_address (first_name, last_name, email, created_at)
-            VALUES (%s, %s, %s, CURRENT_TIMESTAMP)
-            """,(first_name, last_name, email)
-=======
             INSERT INTO users_address (
                 first_name,
                 last_name,
@@ -69,31 +64,16 @@ def create_user(first_name, last_name, email, password):
             VALUES (%s, %s, %s, CURRENT_TIMESTAMP)
             """,
             (first_name, last_name, email)
->>>>>>> fd6ff0a37a3386bff42393694047fd1e4a63bb16
         )
 
         cursor.execute(
             """
-<<<<<<< HEAD
             INSERT INTO users (email, password)
             VALUES (%s, %s)
             """,(email, hashed_pw)
         )
 
         conn.commit()
-=======
-            INSERT INTO users (
-                email,
-                password
-            )
-            VALUES (%s, %s)
-            """,
-            (email, hashed_pw)
-        )
-
-        conn.commit()
-
->>>>>>> fd6ff0a37a3386bff42393694047fd1e4a63bb16
         cursor.execute(
             "SELECT * FROM users WHERE email = %s",
             (email,)

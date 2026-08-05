@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-from fastapi import HTTPException
-=======
->>>>>>> fd6ff0a37a3386bff42393694047fd1e4a63bb16
 from DataBase.user_db import get_user_by_email, get_user_by_user_id, create_user, verify_password
 from DataBase.room_db import create_room, get_room_by_code_and_region, increment_room_players
 from DataBase.members import add_host, add_player, is_member, count_members
@@ -22,28 +18,12 @@ def register_user_service(first_name , last_name, email, login_password):
 
     user = get_user_by_email(email) 
     if user:
-<<<<<<< HEAD
-        return {
-            "status": 201,
-            "message": "User already exists"
-        } 
-    
-    create_user(first_name ,
-                last_name,
-                email, 
-                login_password)
-    return {
-        "status": 200,
-        "message": "User registered successfully"
-    }
-=======
         return user['email'], False
 
     new_user = create_user(first_name , last_name, email, login_password)
     if new_user and isinstance(new_user, dict) and 'email' in new_user:
         return new_user['email'], True
     return email, False
->>>>>>> fd6ff0a37a3386bff42393694047fd1e4a63bb16
 
 def create_room_service(room_id, room_code, room_name, host_id, capacity, rounds, region):
 

@@ -1,5 +1,6 @@
 import mysql.connector
 from mysql.connector import pooling
+from contextlib import contextmanager
 
 db_pool = pooling.MySQLConnectionPool(
     pool_name="mypool",
@@ -11,11 +12,22 @@ db_pool = pooling.MySQLConnectionPool(
 )
 #connection pooling 
 
+@contextmanager
 def get_db():
+    conn = None
+    cursor = None
     try:
         conn = db_pool.get_connection()
         cursor = conn.cursor(dictionary=True)
         yield conn, cursor
     finally:
-        cursor.close()
-        conn.close()
+        if cursor is not None:
+            try:
+                cursor.close()
+            except Exception:
+                pass
+        if conn is not None:
+            try:
+                conn.close()
+            except Exception:
+                pass

@@ -72,12 +72,10 @@ def login(login_details: Login):
     result = login_details_validation(
         login_details.email_id,
         login_details.password)
-
-    # result is a tuple: (True/message, email)
-    status, email = result
-    if status is True:
-        raise 
-    elif status == "Incorrect Password":
+    
+    if result == True :
+        raise HTTPException(status_code=200, detail = 'login Successfully')
+    elif result == "Incorrect Password":
         raise HTTPException(status_code=401, detail="Invalid password")
     else:
         raise HTTPException(status_code=404, detail="User not found")

@@ -14,7 +14,7 @@ const OtpVerify = () => {
 
   const handleClose = () => {
     navigate("/home");
-  };
+  }; 
 
   // Function to resend the OTP to the user's email 
   const resendOtp = async () => {
@@ -86,34 +86,38 @@ const OtpVerify = () => {
   };
 
   return (
-
     <div className="otp-verify-container">
-
       <div className="otp-verify-box">
         <div className="closeIcon" onClick={handleClose}>
           <CloseIcon />
         </div>
+
         <h2>OTP Verification</h2>
+          <p className="otp-subtitle">
+            Enter the code sent to your email address. Expires in: </p>
+        <div className="email-div">
+          <div className="email-text">Enter OTP</div>
+          <input
+            className="email-input"
+            type="text"
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            placeholder="Enter OTP"
+          />
+        </div>
 
-        <input
-          type="text"
-          value={otp}
-          onChange={(e) =>
-            setOtp(e.target.value)
-          }
-          placeholder="Enter OTP"
-        />
+        <div className="login-button-div">
+          <button className="login-button" onClick={verifyOtp}>
+            Verify OTP
+          </button>
+        </div>
 
-        <button onClick={verifyOtp}>
-          Verify OTP
-        </button>
-
-        <button onClick={resendOtp}>
-          Resend OTP
-        </button>
-
+        <div className="signup-created">
+          <button className="account-created-button resend-otp-button" onClick={resendOtp}>
+            Resend OTP
+          </button>
+        </div>
       </div>
-
     </div>
   );
 };

@@ -28,18 +28,15 @@ def background_scheduler():
     except Exception as e:
         logger.error("Background scheduler failed: %s", e)
 
-
 # generate OTP
 def generate_otp() -> str:
     """Generate a secure 6-digit OTP."""
     return str(secrets.randbelow(900000) + 100000)
 
-
 # hash the OTP
 def hash_otp(otp: str) -> str:
     """Return SHA-256 hash of OTP."""
     return hashlib.sha256(otp.encode()).hexdigest()
-
 
 def delete_otp(email: str):
     """Delete OTP record for the given email."""
@@ -63,6 +60,7 @@ def delete_otp(email: str):
 def send_otp(email: str):
     """Generate a new OTP, replacing any existing one, and store its hash."""
     otp = generate_otp()
+    print(f"Generated OTP: {otp}")
     otp_hash = hash_otp(otp)
     expiry = datetime.now(UTC) + timedelta(minutes=OTP_EXPIRY_MINUTES)
 
@@ -149,7 +147,15 @@ def verify_otp(email: str, otp: str):
                     detail="Maximum OTP attempts exceeded. Please request a new OTP."
                 )
 
-            if datetime.now(UTC) > record["expires_at"]:
+            expires_at = record["expires_at"]
+
+            if isinstance(expires_at, str):
+                expires_at = datetime.fromisoformat(expires_at.replace("Z", "+00:00"))
+                
+            if isinstance(expires_at, datetime) and expires_at.tzinfo is None:
+                expires_at = expires_at.replace(tzinfo=UTC)
+
+            if datetime.now(UTC) > expires_at:
                 cursor.execute(
                     """
                     DELETE FROM email_otps

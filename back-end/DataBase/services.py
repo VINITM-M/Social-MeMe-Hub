@@ -6,13 +6,15 @@ from DataBase.members import add_host, add_player, is_member, count_members
 def login_details_validation(email, login_password):
 
     user = get_user_by_email(email) 
-    if user:
-        if verify_password(login_password, user['password']):
-            return True, user['email'] 
-        else:
-            return 'Incorrect Password', user['email'] 
-    else:
-        return "User not found", None
+
+    if user is None:
+        return "User not found" 
+    
+    if verify_password(login_password, user['password']):
+        return True 
+    
+    return 'Incorrect Password'
+    
 
 def register_user_service(first_name , last_name, email, login_password):
 

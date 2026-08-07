@@ -73,8 +73,7 @@ def init_db():
             print("Schema initialization warning:", e)
 
         finally:
-            cursor.close()
-            conn.close()
+            pass
 
 
 if __name__ == "__main__":

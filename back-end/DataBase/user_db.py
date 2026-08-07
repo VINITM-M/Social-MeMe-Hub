@@ -1,5 +1,6 @@
 from DataBase.database import db_pool
 import bcrypt
+from DataBase.database import get_db
 
 #password Implemention with bcrypt function 
 def hash_password(plain_password):
@@ -19,20 +20,21 @@ def verify_password(plain_password, hashed):
     return bcrypt.checkpw(plain_password, hashed)
 
 def get_user_by_email(email):
-    conn = db_pool.get_connection() 
-    cursor = conn.cursor(dictionary=True)
-    try:
+
+    with get_db() as (conn, cursor):
         cursor.execute(
-            "SELECT * FROM USERS WHERE email=%s",
+            """
+            SELECT email, password FROM USERS WHERE email=%s
+            LIMIT 1
+            """, 
             (email,)
-        ) 
-        user = cursor.fetchone() 
-        return user
-    finally:
-        cursor.close() 
-        conn.close() 
-
-
+        )
+        # Fetching the data empties the MySQL buffer and prevents the crash
+        result = cursor.fetchone() 
+        
+        # Return True if user exists, False if not
+        return result 
+    
 def get_user_by_user_id(user_id):
     conn = db_pool.get_connection()
     cursor = conn.cursor(dictionary=True)

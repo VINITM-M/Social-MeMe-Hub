@@ -9,6 +9,7 @@ import uuid
 import string
 import random
 import time
+from DataBase.validation import validation_email
 
 
 app = FastAPI()
@@ -69,9 +70,13 @@ def generate_room_code():
 @app.post("/login")
 def login(login_details: Login):
 
-    result = login_details_validation(
+    if validation_email(login_details.email_id): 
+        result = login_details_validation(
         login_details.email_id,
-        login_details.password)
+        login_details.password) 
+
+    else:
+        raise HTTPException(status_code = 401, detail = "Invalid Email Format") 
     
     if result == True :
         raise HTTPException(status_code=200, detail = 'login Successfully')
@@ -82,11 +87,14 @@ def login(login_details: Login):
 
 @app.post('/signup')
 def signup(sign_details: Signup):
-    print(f"Received signup request: {sign_details.first_name, sign_details.last_name, sign_details.email_id, sign_details.password}" )
-    result = register_user_service( sign_details.first_name ,  
+
+    if validation_email(sign_details.email_id): 
+        result = register_user_service( sign_details.first_name ,  
                                     sign_details.last_name,
                                     sign_details.email_id, 
-                                    sign_details.password) 
+                                    sign_details.password)  
+    else:
+        raise HTTPException(status_code = 401, detail = "Invalid Email Format")
     return result 
 @app.post('/otp') 
 def otp_verify(request: OtpVerify):

@@ -29,7 +29,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose }) => {
     const [email_id, setemail_id] = useState("");
     const [password, setpassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [errorMessage, setErrorMessage] = useState("");
 
 
     //otp verify logic 
@@ -84,15 +83,14 @@ const LoginPage: React.FC<LoginPageProps> = ({ onClose }) => {
 
             if (error.response?.status === 401) {
 
-                setErrorMessage("Invalid Password");
+                alert("Invalid Password");
 
             } else if (error.response?.status === 404) {
 
-                setErrorMessage("User not found");
+                alert("User not found");
 
             } else {
-
-                setErrorMessage("Server error. Please try again later.");
+                 alert("Server Error, Please Try Again");
             }
         }
     };

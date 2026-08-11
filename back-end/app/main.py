@@ -70,7 +70,7 @@ def generate_room_code():
 @app.post("/login")
 def login(login_details: Login):
 
-    if validation_email(login_details.email_id): 
+    if validation_email(login_details.email_id):  
         result = login_details_validation(
         login_details.email_id,
         login_details.password) 

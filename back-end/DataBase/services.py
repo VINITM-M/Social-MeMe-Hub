@@ -1,11 +1,12 @@
 from DataBase.user_db import get_user_by_email, get_user_by_user_id, create_user, verify_password
 from DataBase.room_db import create_room, get_room_by_code_and_region, increment_room_players
 from DataBase.members import add_host, add_player, is_member, count_members
+from DataBase.bloom_test import find_user_by_email
 
 
 def login_details_validation(email, login_password):
 
-    user = get_user_by_email(email) 
+    user = find_user_by_email(email)
 
     if user is None:
         return "User not found" 

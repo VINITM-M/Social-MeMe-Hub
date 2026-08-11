@@ -1,6 +1,10 @@
 from DataBase.database import db_pool
 import bcrypt
 from DataBase.database import get_db
+from DataBase.bloom import DatabaseEmailBloomFilter
+
+
+email_bloom_filter = DatabaseEmailBloomFilter()
 
 #password Implemention with bcrypt function 
 def hash_password(plain_password):
@@ -20,6 +24,11 @@ def verify_password(plain_password, hashed):
     return bcrypt.checkpw(plain_password, hashed)
 
 def get_user_by_email(email):
+
+    # A Bloom filter can safely reject definite misses. A positive result
+    # still performs the SQL query because Bloom filters can have false positives.
+    if not email_bloom_filter.might_contain(email):
+        return None
 
     with get_db() as (conn, cursor):
         cursor.execute(
@@ -76,6 +85,7 @@ def create_user(first_name, last_name, email, password):
         )
 
         conn.commit()
+        email_bloom_filter.add(email)
         cursor.execute(
             "SELECT * FROM users WHERE email = %s",
             (email,)

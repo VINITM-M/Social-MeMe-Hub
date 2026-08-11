@@ -3,3 +3,5 @@ fastapi
 mysql-connector-python 
 bcrypt
 pyotp
+mmh3
+bitarray

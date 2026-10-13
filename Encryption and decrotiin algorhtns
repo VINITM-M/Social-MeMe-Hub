@@ -1,0 +1,12 @@
+reference link: https://medium.com/@tubelwj/implementing-data-encryption-and-decryption-using-python-3e0f4c9abebc
+
+asymmetric encryption and decryption how what is means 
+
+Deep about encryptio and decryption algorithms 
+
+Symmetric encryption works like one key opening one lock. The same key is used for both encryption and decryption — just like you and your partner each holding half of a treasure map; only when the two halves are combined can the treasure’s location be revealed.
+
+
+Asymmetric encryption, on the other hand, is more like a pair of matching lock and key. One key (the public key) can be shared openly for encryption, while only the other key (the private key) can decrypt the information. This ensures confidentiality and identity authentication during transmission.
+
+Diff AES vs RSA 

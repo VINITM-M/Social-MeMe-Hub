@@ -10,3 +10,11 @@ Symmetric encryption works like one key opening one lock. The same key is used f
 Asymmetric encryption, on the other hand, is more like a pair of matching lock and key. One key (the public key) can be shared openly for encryption, while only the other key (the private key) can decrypt the information. This ensures confidentiality and identity authentication during transmission.
 
 Diff AES vs RSA 
+
+
+Feature	AES	RSA
+Type	Symmetric	Asymmetric
+Keys	1 shared secret key	Public + Private key pair
+Speed	Very fast	Slow
+Best For	Large data (files, databases)	Key exchange, signatures
+Quantum Risk	Resistant (with AES-256)	Vulnerable (Shor's algorithm)

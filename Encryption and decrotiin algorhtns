@@ -18,3 +18,10 @@ Keys	1 shared secret key	Public + Private key pair
 Speed	Very fast	Slow
 Best For	Large data (files, databases)	Key exchange, signatures
 Quantum Risk	Resistant (with AES-256)	Vulnerable (Shor's algorithm)
+
+
+Applying Asymmetric RSA to Encrypt Data
+
+RSA is a commonly used asymmetric encryption algorithm that uses a public key for encryption and a private key for decryption.
+
+The RSA algorithm is based on number theory. It generates a pair of large prime numbers and performs calculations to produce the public and private keys.
